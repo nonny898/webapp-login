@@ -43,8 +43,13 @@ public class DeleteServlet extends HttpServlet implements Routable {
 
         @Override
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
-                rd.include(request, response);
+                boolean authorized = securityService.isAuthorized(request);
+                if (authorized) {
+                        RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
+                        rd.include(request, response);
+                } else {
+                        response.sendRedirect("/");
+                }
         }
 
         @Override

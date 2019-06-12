@@ -54,8 +54,7 @@ public class UserListServlet extends HttpServlet implements Routable {
         @Override
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 List<String> dataList = new ArrayList<>();
-                boolean authorized = securityService.isAuthorized(request);
-                if (authorized) {
+                if (loginBean.isValidated()) {
                         ResultSet resultSet;
                         try {
                                 Statement statement = mySql.connection().createStatement();
@@ -70,8 +69,6 @@ public class UserListServlet extends HttpServlet implements Routable {
                         } catch (SQLException | ClassNotFoundException e) {
                                 e.printStackTrace();
                         }
-                        // do MVC in here
-//                        String username = (String) request.getSession().getAttribute("username");
                         request.setAttribute("data", dataList);
                         RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/userlist.jsp");
                         rd.include(request, response);
