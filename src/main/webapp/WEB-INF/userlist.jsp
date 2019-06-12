@@ -31,6 +31,9 @@
     <form action="add">
         <input type="submit" value="Add User">
     </form>
+    <form action="edit">
+        <input type="submit" value="Edit">
+    </form>
     <form action="delete">
         <input type="submit" value="Remove User">
     </form>
