@@ -11,32 +11,32 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 
 public class Webapp {
-
-        public static void main(String[] args) {
-
-                File docBase = new File("src/main/webapp/");
-                docBase.mkdirs();
-                Tomcat tomcat = new Tomcat();
-                tomcat.setPort(8082);
-
-                SecurityService securityService = new SecurityService();
-                ServletRouter servletRouter = new ServletRouter();
-                MySql mySql = new MySql();
-                LoginBean loginBean = new LoginBean();
-                servletRouter.setSecurityService(securityService);
-                servletRouter.setMySql(mySql);
-                servletRouter.setLoginBean(loginBean);
-
-                Context ctx;
-                try {
-                        ctx = tomcat.addWebapp("", docBase.getAbsolutePath());
-                        servletRouter.init(ctx);
-
-                        tomcat.start();
-                        tomcat.getServer().await();
-                } catch (ServletException | LifecycleException ex) {
-                        ex.printStackTrace();
-                }
-
+    
+    public static void main(String[] args) {
+        
+        File docBase = new File("src/main/webapp/");
+        docBase.mkdirs();
+        Tomcat tomcat = new Tomcat();
+        tomcat.setPort(8082);
+        
+        SecurityService securityService = new SecurityService();
+        ServletRouter servletRouter = new ServletRouter();
+        MySql mySql = new MySql();
+        LoginBean loginBean = new LoginBean();
+        servletRouter.setSecurityService(securityService);
+        servletRouter.setMySql(mySql);
+        servletRouter.setLoginBean(loginBean);
+        
+        Context ctx;
+        try {
+            ctx = tomcat.addWebapp("", docBase.getAbsolutePath());
+            servletRouter.init(ctx);
+            
+            tomcat.start();
+            tomcat.getServer().await();
+        } catch (LifecycleException ex) {
+            ex.printStackTrace();
         }
+        
+    }
 }

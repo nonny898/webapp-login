@@ -4,10 +4,14 @@
 <p>${error}</p>
 <form action="/add" method="post">
     Username:<br/>
-    <input type="text" name="username"/>
+    <label>
+        <input type="text" name="username"/>
+    </label>
     <br/>
     Password:<br/>
-    <input type="password" name="password">
+    <label>
+        <input type="password" name="password">
+    </label>
     <br><br>
     <input type="submit" value="Submit">
 </form>

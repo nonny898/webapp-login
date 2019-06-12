@@ -55,7 +55,7 @@ class ServletRouter {
                                 routable.setLoginBean(loginBean);
                                 String name = routable.getClass().getSimpleName();
                                 Tomcat.addServlet(ctx, name, (HttpServlet) routable);
-                                ctx.addServletMapping(routable.getMapping(), name);
+                                ctx.addServletMappingDecoded(routable.getMapping(), name);
                         } catch (InstantiationException | IllegalAccessException e) {
                                 e.printStackTrace();
                         }
