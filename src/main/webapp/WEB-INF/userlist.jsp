@@ -28,16 +28,16 @@
     </table>
     </br>
     </br>
-    <form action="add">
+    <form action="${pageContext.request.contextPath}/add">
         <input type="submit" value="Add User">
     </form>
-    <form action="edit">
+    <form action="${pageContext.request.contextPath}/edit">
         <input type="submit" value="Edit">
     </form>
-    <form action="delete">
+    <form action="${pageContext.request.contextPath}/delete">
         <input type="submit" value="Remove User">
     </form>
-    <form action="logout">
+    <form action="${pageContext.request.contextPath}/logout">
         <input type="submit" value="Logout">
     </form>
     </body>

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DeleteServlet extends HttpServlet implements Routable {
@@ -61,10 +62,21 @@ public class DeleteServlet extends HttpServlet implements Routable {
                         if (!StringUtils.equals(username,loginBean.getUsername())) {
                                 try {
                                         // Database name to access
-                                        PreparedStatement ps = mySql.connection().prepareStatement("delete from login where username=?");
-                                        ps.setString(1, username);
-                                        ps.executeUpdate();
-                                        response.sendRedirect("/");
+                                        PreparedStatement ps = mySql.connection().prepareStatement("select * from login where username = ? and password = ?");
+                                        ps.setString(1,username);
+                                        ps.setString(2,password);
+                                        ResultSet rs = ps.executeQuery();
+                                        if (rs.next()) {
+                                                ps = mySql.connection().prepareStatement("delete from login where username=?");
+                                                ps.setString(1, username);
+                                                ps.executeUpdate();
+                                                response.sendRedirect("/");
+                                        } else  {
+                                                String error = "Username does not exist.";
+                                                request.setAttribute("error", error);
+                                                RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/edit.jsp");
+                                                rd.include(request, response);
+                                        }
                                 } catch (SQLException e) {
                                         // process sql exception
                                         mySql.printSQLException(e);

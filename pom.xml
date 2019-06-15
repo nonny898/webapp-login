@@ -7,7 +7,7 @@
     <groupId>io.muzoo.ooc.weblogin</groupId>
     <artifactId>webapp-login</artifactId>
     <version>1.0-SNAPSHOT</version>
-    
+
     <name>Login Webapp</name>
     <url>http://maven.apache.org</url>
 
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-logging-juli</artifactId>
-            <version>${tomcat.version}</version>
+            <version>9.0.0.M6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jsp-api</artifactId>
-            <version>${tomcat.version}</version>
+            <version>9.0.21</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -66,31 +66,31 @@
             <type>jar</type>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>2.0.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <assembleDirectory>target</assembleDirectory>
-                    <programs>
-                        <program>
+                    <archive>
+                        <manifest>
                             <mainClass>io.muzoo.ooc.weblogin.Webapp</mainClass>
-                            <name>webapp</name>
-                        </program>
-                    </programs>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
                         <goals>
-                            <goal>assemble</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>

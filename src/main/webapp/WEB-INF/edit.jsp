@@ -2,7 +2,7 @@
 <body>
 <h2>Edit User</h2>
 <p>${error}</p>
-<form action="/edit" method="post">
+<form action="${pageContext.request.contextPath}/edit" method="post">
     Old Username:<br/>
     <label>
         <input type="text" name="oldusername"/>

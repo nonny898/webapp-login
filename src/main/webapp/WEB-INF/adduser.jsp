@@ -2,7 +2,7 @@
 <body>
 <h2>Add User</h2>
 <p>${error}</p>
-<form action="/add" method="post">
+<form action="${pageContext.request.contextPath}/add" method="post">
     Username:<br/>
     <label>
         <input type="text" name="username"/>

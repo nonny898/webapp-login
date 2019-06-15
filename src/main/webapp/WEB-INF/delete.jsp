@@ -2,7 +2,7 @@
 <body>
 <h2>Delete User</h2>
 <p>${error}</p>
-<form action="/delete" method="post">
+<form action="${pageContext.request.contextPath}/delete" method="post">
     Username:<br/>
     <input type="text" name="username"/>
     <br/>
