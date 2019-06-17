@@ -10,6 +10,8 @@
         <title>User List</title>
     </head>
     <body>
+    <h2>User List</h2>
+    <p>${error}</p>
     <table border="1" cellpadding="5">
         <tr>
             <td><b>Username</b></td>

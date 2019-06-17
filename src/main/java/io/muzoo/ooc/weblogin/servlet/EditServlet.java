@@ -64,11 +64,11 @@ public class EditServlet extends HttpServlet implements Routable {
                 if (rs.next()) {
                     ps = mySql.connection().prepareStatement("update login set username = '"+newUsername+"'  where username = '"+oldUsername+"'");
                     ps.executeUpdate();
-                    ps = mySql.connection().prepareStatement("update login set password = '"+newPassword+"'  where username = '"+oldUsername+"'");
+                    ps = mySql.connection().prepareStatement("update login set password = '"+newPassword+"'  where password = '"+oldPassword+"'");
                     ps.executeUpdate();
                     response.sendRedirect("/");
                 } else  {
-                    String error = "Username does not exist.";
+                    String error = "Wrong username or password.";
                     request.setAttribute("error", error);
                     RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/edit.jsp");
                     rd.include(request, response);

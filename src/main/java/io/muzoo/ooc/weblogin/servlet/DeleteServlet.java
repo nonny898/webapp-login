@@ -17,83 +17,83 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DeleteServlet extends HttpServlet implements Routable {
-
-        private SecurityService securityService;
-        private MySql mySql;
-        private LoginBean loginBean;
-
-        @Override
-        public String getMapping() {
-                return "/delete";
+    
+    private SecurityService securityService;
+    private MySql mySql;
+    private LoginBean loginBean;
+    
+    @Override
+    public String getMapping() {
+        return "/delete";
+    }
+    
+    @Override
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+    
+    @Override
+    public void setMySql(MySql mySql) {
+        this.mySql =mySql;
+    }
+    
+    @Override
+    public void setLoginBean(LoginBean loginBean) {
+        this.loginBean = loginBean;
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        boolean authorized = securityService.isAuthorized(request);
+        if (authorized) {
+            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
+            rd.include(request, response);
+        } else {
+            response.sendRedirect("/");
         }
-
-        @Override
-        public void setSecurityService(SecurityService securityService) {
-                this.securityService = securityService;
-        }
-
-        @Override
-        public void setMySql(MySql mySql) {
-                this.mySql =mySql;
-        }
-
-        @Override
-        public void setLoginBean(LoginBean loginBean) {
-                this.loginBean = loginBean;
-        }
-
-        @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                boolean authorized = securityService.isAuthorized(request);
-                if (authorized) {
-                        RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
-                        rd.include(request, response);
-                } else {
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
+            if (!StringUtils.equals(username,loginBean.getUsername())) {
+                try {
+                    // Database name to access
+                    PreparedStatement ps = mySql.connection().prepareStatement("select * from login where username = ? and password = ?");
+                    ps.setString(1,username);
+                    ps.setString(2,password);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        ps = mySql.connection().prepareStatement("delete from login where username=?");
+                        ps.setString(1, username);
+                        ps.executeUpdate();
                         response.sendRedirect("/");
-                }
-        }
-
-        @Override
-        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                String username = request.getParameter("username");
-                String password = request.getParameter("password");
-
-                if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
-                        if (!StringUtils.equals(username,loginBean.getUsername())) {
-                                try {
-                                        // Database name to access
-                                        PreparedStatement ps = mySql.connection().prepareStatement("select * from login where username = ? and password = ?");
-                                        ps.setString(1,username);
-                                        ps.setString(2,password);
-                                        ResultSet rs = ps.executeQuery();
-                                        if (rs.next()) {
-                                                ps = mySql.connection().prepareStatement("delete from login where username=?");
-                                                ps.setString(1, username);
-                                                ps.executeUpdate();
-                                                response.sendRedirect("/");
-                                        } else  {
-                                                String error = "Username does not exist.";
-                                                request.setAttribute("error", error);
-                                                RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/edit.jsp");
-                                                rd.include(request, response);
-                                        }
-                                } catch (SQLException e) {
-                                        // process sql exception
-                                        mySql.printSQLException(e);
-                                } catch (ClassNotFoundException e) {
-                                        e.printStackTrace();
-                                }
-                        } else {
-                                String error = "Cannot delete self.";
-                                request.setAttribute("error", error);
-                                RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
-                                rd.include(request, response);
-                        }
-                } else {
-                        String error = "Username or password is missing.";
+                    } else  {
+                        String error = "Username does not exist.";
                         request.setAttribute("error", error);
                         RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
                         rd.include(request, response);
+                    }
+                } catch (SQLException e) {
+                    // process sql exception
+                    mySql.printSQLException(e);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
+            } else {
+                String error = "Cannot delete self.";
+                request.setAttribute("error", error);
+                RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
+                rd.include(request, response);
+            }
+        } else {
+            String error = "Username or password is missing.";
+            request.setAttribute("error", error);
+            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/delete.jsp");
+            rd.include(request, response);
         }
+    }
 }
