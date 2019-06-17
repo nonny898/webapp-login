@@ -6,6 +6,7 @@ import io.muzoo.ooc.weblogin.service.SecurityService;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import io.muzoo.ooc.weblogin.Routable;
 import org.apache.commons.lang.StringUtils;
 
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet implements Routable {
 
 

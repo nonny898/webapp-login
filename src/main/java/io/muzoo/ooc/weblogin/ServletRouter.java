@@ -17,50 +17,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ServletRouter {
-
-        private static final List<Class<? extends Routable>> routables = new ArrayList<>();
-
-        static {
-                routables.add(UserListServlet.class);
-                routables.add(LoginServlet.class);
-                routables.add(LogoutServlet.class);
-                routables.add(AddUserServlet.class);
-                routables.add(DeleteServlet.class);
-                routables.add(EditServlet.class);
+    
+    private static final List<Class<? extends Routable>> routables = new ArrayList<>();
+    
+    static {
+        routables.add(UserListServlet.class);
+        routables.add(LoginServlet.class);
+        routables.add(LogoutServlet.class);
+        routables.add(AddUserServlet.class);
+        routables.add(DeleteServlet.class);
+        routables.add(EditServlet.class);
+    }
+    
+    private SecurityService securityService;
+    
+    private MySql mySql;
+    
+    private LoginBean loginBean;
+    
+    public void setLoginBean(LoginBean loginBean) {
+        this.loginBean = loginBean;
+    }
+    
+    public void setMySql(MySql mySql) {
+        this.mySql = mySql;
+    }
+    
+    void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+    
+    void init(Context ctx) {
+        for (Class<? extends Routable> routableClass : routables) {
+            try {
+                Routable routable = routableClass.newInstance();
+                routable.setSecurityService(securityService);
+                routable.setMySql(mySql);
+                routable.setLoginBean(loginBean);
+                String name = routable.getClass().getSimpleName();
+                Tomcat.addServlet(ctx, name, (HttpServlet) routable);
+                ctx.addServletMappingDecoded(routable.getMapping(), name);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
-
-        private SecurityService securityService;
-
-        private MySql mySql;
-
-        private LoginBean loginBean;
-
-        public void setLoginBean(LoginBean loginBean) {
-                this.loginBean = loginBean;
-        }
-
-        public void setMySql(MySql mySql) {
-                this.mySql = mySql;
-        }
-
-        void setSecurityService(SecurityService securityService) {
-                this.securityService = securityService;
-        }
-
-        void init(Context ctx) {
-                for (Class<? extends Routable> routableClass : routables) {
-                        try {
-                                Routable routable = routableClass.newInstance();
-                                routable.setSecurityService(securityService);
-                                routable.setMySql(mySql);
-                                routable.setLoginBean(loginBean);
-                                String name = routable.getClass().getSimpleName();
-                                Tomcat.addServlet(ctx, name, (HttpServlet) routable);
-                                ctx.addServletMappingDecoded(routable.getMapping(), name);
-                        } catch (InstantiationException | IllegalAccessException e) {
-                                e.printStackTrace();
-                        }
-                }
-        }
-
+    }
 }

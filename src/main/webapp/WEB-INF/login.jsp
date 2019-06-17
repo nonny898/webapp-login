@@ -2,7 +2,7 @@
 <body>
 <h2>Login</h2>
 <p>${error}</p>
-<form action="${pageContext.request.contextPath}/login" method="post">
+<form action="/login" method="post">
     Username:<br/>
     <input type="text" name="username"/>
     <br/>
